@@ -7,11 +7,10 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 
-public class RestErrorHandler implements Handler<RoutingContext>
-{
+public class RestErrorHandler implements Handler<RoutingContext> {
+
     @Override
-    public void handle(RoutingContext context)
-    {
+    public void handle(RoutingContext context) {
         HttpServerResponse response = context.response();
 
         JsonObject jsonError = new JsonObject();
@@ -21,7 +20,7 @@ public class RestErrorHandler implements Handler<RoutingContext>
             } else {
                 jsonError.put("error", new JsonObject().put("code", 500).put("message", context.failure().getMessage()));
                 JsonArray stack = new JsonArray();
-                for (StackTraceElement elem: context.failure().getStackTrace()) {
+                for (StackTraceElement elem : context.failure().getStackTrace()) {
                     stack.add(elem.toString());
                 }
                 jsonError.put("stack", stack);

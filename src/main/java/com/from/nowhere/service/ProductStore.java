@@ -6,17 +6,19 @@ import io.vertx.core.json.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductStore
-{
+public class ProductStore {
+
     private static ProductStore instance = new ProductStore();
-    public interface Container
-    {
+
+    public interface Container {
+
         default ProductStore getProductStore() {
             return ProductStore.instance;
         }
     }
 
     private Map<String, JsonObject> products = new HashMap<>();
+
     private ProductStore() {
         setUpInitialData();
     }

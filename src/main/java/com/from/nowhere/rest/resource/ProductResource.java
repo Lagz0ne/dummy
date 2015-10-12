@@ -7,9 +7,10 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 
-public class ProductResource implements ProductStore.Container, RestValidations
-{
+public class ProductResource implements ProductStore.Container, RestValidations {
+
     private static ProductResource instance = new ProductResource();
+
     public static ProductResource getInstance() {
         return instance;
     }

@@ -3,10 +3,9 @@ package com.from.nowhere.rest;
 import com.from.nowhere.rest.resource.ProductResource;
 import io.vertx.ext.web.Router;
 
-public class RestResources
-{
-    public static void registerModules(Router router)
-    {
+public class RestResources {
+
+    public static void registerModules(Router router) {
         registerProductResource(router);
     }
 

@@ -5,8 +5,8 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 
-public class RestVerticle extends AbstractVerticle
-{
+public class RestVerticle extends AbstractVerticle {
+
     public static void main(String args[]) {
         Runner.run(RestVerticle.class);
     }
@@ -22,8 +22,8 @@ public class RestVerticle extends AbstractVerticle
         RestResources.registerModules(router);
 
         vertx.createHttpServer()
-            .requestHandler(router::accept)
-            .listen(8080);
+                .requestHandler(router::accept)
+                .listen(8080);
     }
 
 

@@ -4,9 +4,9 @@ import io.vertx.core.http.HttpServerRequest;
 
 import java.util.Objects;
 
-public interface RestValidations
-{
-    default void notNull(HttpServerRequest request, String ... args) {
+public interface RestValidations {
+
+    default void notNull(HttpServerRequest request, String... args) {
         Objects.nonNull(request);
         Objects.nonNull(args);
 
