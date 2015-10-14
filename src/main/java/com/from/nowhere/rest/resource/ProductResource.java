@@ -2,6 +2,7 @@ package com.from.nowhere.rest.resource;
 
 import com.from.nowhere.rest.RestValidations;
 import com.from.nowhere.service.ProductManager;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.rxjava.ext.web.RoutingContext;
 import rx.Observable;
@@ -19,6 +20,11 @@ public class ProductResource implements ProductManager.Container, RestValidation
         String productID = routingContext.request().getParam("productID");
 
         return getProductManager().getProduct(productID);
+    }
+
+    public Observable<JsonArray> getProducts(RoutingContext routingContext) {
+        return getProductManager().getProducts()
+                .map(JsonArray::new);
     }
 
 }

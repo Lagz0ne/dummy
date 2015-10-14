@@ -11,24 +11,49 @@ import rx.Observable;
 import java.util.function.Function;
 
 import static io.vertx.core.http.HttpMethod.GET;
+import static io.vertx.core.http.HttpMethod.POST;
+import static io.vertx.core.http.HttpMethod.PUT;
 
 public interface RestResourcesHelper {
 
     Router getRouter();
 
-    default void GET(String path, Function<RoutingContext, Observable<JsonObject>> handler) {
+    default void GET(String path, Function<RoutingContext, Observable<?>> handler) {
         register(GET, path, handler);
     }
 
-    default void register(HttpMethod method, String path, Function<RoutingContext, Observable<JsonObject>> handler) {
+    default void PUT(String path, Function<RoutingContext, Observable<?>> handler) {
+        register(PUT, path, handler);
+    }
+
+    default void POST(String path, Function<RoutingContext, Observable<?>> handler) {
+        register(POST, path, handler);
+    }
+
+    default void register(HttpMethod method, String path, Function<RoutingContext, Observable<?>> handler) {
         getRouter().route(method, path).handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
             handler.apply(routingContext)
                     .subscribe(
-                            result    -> response.end(result.encodePrettily()),
+                            result    -> handleResult(response, result),
                             throwable -> response.end(generateErrorJson(throwable).encodePrettily())
                     );
         });
+    }
+
+    default void handleResult(HttpServerResponse response, Object result) {
+        if (result == null) {
+            response.end();
+            return;
+        }
+
+        if (result instanceof JsonObject) {
+            response.end(((JsonObject) result).encodePrettily());
+        } else if (result instanceof JsonArray) {
+            response.end(((JsonArray) result).encodePrettily());
+        } else  {
+            response.end(result.toString());
+        }
     }
 
     default JsonObject generateErrorJson(Throwable throwable) {

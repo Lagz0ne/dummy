@@ -24,6 +24,7 @@ public class RestResources implements RestResourcesHelper {
         ProductResource productResource = ProductResource.getInstance();
 
         GET("/product/:productID", productResource::getProduct);
+        GET("/products", productResource::getProducts);
     }
 
 

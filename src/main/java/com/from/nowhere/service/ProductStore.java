@@ -18,10 +18,22 @@ public class ProductStore implements MongoClientProvider {
         }
     }
 
-    private ProductStore() {}
+    protected ProductStore() {
+        initializeStoreData();
+    }
 
-    public Observable<String> addProduct(final JsonObject product) {
-        return getMongoClient().flatMap(m -> m.saveObservable(PRODUCTS, product));
+    /**
+     * Proof of concept: We can use mongodb in startup even without
+     * DI. Defer works
+     *
+     * **/
+    private void initializeStoreData() {
+        String random = Math.random() + "";
+        JsonObject product = new JsonObject()
+                .put("id", random)
+                .put("name", "Random whiskey");
+
+        getMongoClient().flatMap(m -> m.insertObservable(PRODUCTS, product)).subscribe();
     }
 
     public Observable<Option<JsonObject>> getProduct(String id) {
@@ -33,9 +45,9 @@ public class ProductStore implements MongoClientProvider {
     }
 
     public Observable<List<JsonObject>> getProducts() {
-        return getMongoClient().flatMap(mongoClient ->
-                        mongoClient.findObservable(PRODUCTS, new JsonObject())
-        );
+
+        return getMongoClient()
+                .flatMap(m -> m.findObservable(PRODUCTS, new JsonObject()));
     }
 
 }
