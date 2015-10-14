@@ -1,8 +1,8 @@
 package com.from.nowhere.rest;
 
 import io.vertx.core.Handler;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.ext.web.RoutingContext;
+import io.vertx.rxjava.core.http.HttpServerResponse;
+import io.vertx.rxjava.ext.web.RoutingContext;
 
 public class RestHeaderHandler implements Handler<RoutingContext> {
 

@@ -1,9 +1,9 @@
 package com.from.nowhere.rest;
 
 import com.from.nowhere.Runner;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.rxjava.core.AbstractVerticle;
+import io.vertx.rxjava.ext.web.Router;
+import io.vertx.rxjava.ext.web.handler.BodyHandler;
 
 public class RestVerticle extends AbstractVerticle {
 
@@ -13,6 +13,10 @@ public class RestVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
+        startRestServer();
+    }
+
+    private void startRestServer() {
         Router router = Router.router(vertx);
 
         router.route().handler(BodyHandler.create());
@@ -25,6 +29,5 @@ public class RestVerticle extends AbstractVerticle {
                 .requestHandler(router::accept)
                 .listen(8080);
     }
-
 
 }

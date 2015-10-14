@@ -1,50 +1,41 @@
 package com.from.nowhere.service;
 
-import io.vertx.core.json.JsonArray;
+import com.from.nowhere.mongoclient.MongoClientProvider;
 import io.vertx.core.json.JsonObject;
+import javaslang.control.Option;
+import rx.Observable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public class ProductStore {
+public class ProductStore implements MongoClientProvider {
 
     private static ProductStore instance = new ProductStore();
+    private static final String PRODUCTS = "products";
 
     public interface Container {
-
         default ProductStore getProductStore() {
             return ProductStore.instance;
         }
     }
 
-    private Map<String, JsonObject> products = new HashMap<>();
+    private ProductStore() {}
 
-    private ProductStore() {
-        setUpInitialData();
+    public Observable<String> addProduct(final JsonObject product) {
+        return getMongoClient().flatMap(m -> m.saveObservable(PRODUCTS, product));
     }
 
-    private void setUpInitialData() {
-        addProduct(new JsonObject().put("id", "prod3568").put("name", "Egg Whisk").put("price", 3.99).put("weight", 150));
-        addProduct(new JsonObject().put("id", "prod7340").put("name", "Tea Cosy").put("price", 5.99).put("weight", 100));
-        addProduct(new JsonObject().put("id", "prod8643").put("name", "Spatula").put("price", 1.00).put("weight", 80));
+    public Observable<Option<JsonObject>> getProduct(String id) {
+        JsonObject query = new JsonObject().put("id", id);
+
+        return getMongoClient()
+                .flatMap(m -> m.findOneObservable(PRODUCTS, query, new JsonObject()))
+                .map(Option::of);
     }
 
-    private void addProduct(JsonObject product) {
-        products.put(product.getString("id"), product);
-    }
-
-    public void addProduct(String id, JsonObject product) {
-        products.put(id, product);
-    }
-
-    public JsonObject getProduct(String id) {
-        return products.get(id);
-    }
-
-    public JsonArray getProducts() {
-        JsonArray arr = new JsonArray();
-        products.forEach((k, v) -> arr.add(v));
-        return arr;
+    public Observable<List<JsonObject>> getProducts() {
+        return getMongoClient().flatMap(mongoClient ->
+                        mongoClient.findObservable(PRODUCTS, new JsonObject())
+        );
     }
 
 }

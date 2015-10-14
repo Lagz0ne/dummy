@@ -1,6 +1,6 @@
 package com.from.nowhere.rest;
 
-import io.vertx.core.http.HttpServerRequest;
+import io.vertx.rxjava.core.http.HttpServerRequest;
 
 import java.util.Objects;
 

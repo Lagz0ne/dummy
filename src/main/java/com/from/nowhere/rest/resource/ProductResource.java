@@ -1,13 +1,12 @@
 package com.from.nowhere.rest.resource;
 
 import com.from.nowhere.rest.RestValidations;
-import com.from.nowhere.service.ProductStore;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.JsonArray;
+import com.from.nowhere.service.ProductManager;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.RoutingContext;
+import io.vertx.rxjava.ext.web.RoutingContext;
+import rx.Observable;
 
-public class ProductResource implements ProductStore.Container, RestValidations {
+public class ProductResource implements ProductManager.Container, RestValidations {
 
     private static ProductResource instance = new ProductResource();
 
@@ -15,27 +14,11 @@ public class ProductResource implements ProductStore.Container, RestValidations 
         return instance;
     }
 
-    public void getProduct(RoutingContext routingContext) {
+    public Observable<JsonObject> getProduct(RoutingContext routingContext) {
         notNull(routingContext.request(), "productID");
         String productID = routingContext.request().getParam("productID");
-        HttpServerResponse response = routingContext.response();
 
-        JsonObject product = getProductStore().getProduct(productID);
-        response.end(product.encodePrettily());
-    }
-
-    public void putProduct(RoutingContext routingContext) {
-        notNull(routingContext.request(), "productID");
-        String productID = routingContext.request().getParam("productID");
-        JsonObject product = routingContext.getBodyAsJson();
-
-        getProductStore().addProduct(productID, product);
-        routingContext.response().end();
-    }
-
-    public void getProducts(RoutingContext routingContext) {
-        JsonArray arr = getProductStore().getProducts();
-        routingContext.response().putHeader("content-type", "text/html").end(arr.encodePrettily());
+        return getProductManager().getProduct(productID);
     }
 
 }
