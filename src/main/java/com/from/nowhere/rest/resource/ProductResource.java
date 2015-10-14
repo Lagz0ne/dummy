@@ -1,16 +1,15 @@
 package com.from.nowhere.rest.resource;
 
 import com.from.nowhere.rest.RestValidations;
-import com.from.nowhere.service.ProductManager;
+import com.from.nowhere.service.ProductManagerImpl;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.rxjava.ext.web.RoutingContext;
 import rx.Observable;
 
-public class ProductResource implements ProductManager.Container, RestValidations {
+public class ProductResource implements ProductManagerImpl.Container, RestValidations {
 
     private static ProductResource instance = new ProductResource();
-
     public static ProductResource getInstance() {
         return instance;
     }
