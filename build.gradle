@@ -25,6 +25,8 @@ dependencies {
     compile "io.vertx:vertx-rx-java:$version"
     compile "io.vertx:vertx-mongo-client:$version"
     compile 'com.javaslang:javaslang:2.0.0-beta'
+    compile 'org.slf4j:slf4j-simple:1.6.1'
+    compile "io.vertx:vertx-shell:$version"
 }
 
 shadowJar {
